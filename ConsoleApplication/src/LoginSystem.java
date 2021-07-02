@@ -67,7 +67,7 @@ public class LoginSystem {
         boolean flag = false;
         for (int i = 0; i <= 9; i++) {
             String str1 = Integer.toString(i);
-            if (password.contains(str1)) {                                                     // Checking if at least one number is present
+            if (password.contains(str1)) {                                                 
                 flag = true;
                 break;
             }
