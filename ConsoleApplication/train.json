@@ -1,0 +1,64 @@
+{
+  "Trains" : [ {
+      "Train_Name_1" : "Train A",
+      "Coaches" : [ {
+        "Coach_Type_1" : "Sleeper",
+        "Coach_Name_1" : "S1",
+        "Coach_Fare_1" : 10,
+        "Seats" : [ {
+          "Seat_Status_1" : "Available",
+          "Seat_Number_1" : 1,
+          "Seat_Type_1" : "Lower"
+        }, {
+          "Seat_Status_2" : "Available",
+          "Seat_Number_2" : 2,
+          "Seat_Type_2" : "Middle"
+        } ]
+      }, {
+        "Coach_Name_2" : "A1",
+        "Coach_Type_2" : "AC",
+        "Coach_Fare_2" : 160,
+        "Seats" : [ {
+          "Seat_Status_1" : "Available",
+          "Seat_Number_1" : 1,
+          "Seat_Type_1" : "Lower"
+        }, {
+          "Seat_Status_2" : "Available",
+          "Seat_Number_2" : 2,
+          "Seat_Type_2" : "Middle"
+        } ]
+      } ],
+      "Train_Number_1" : 1234
+    } ,
+    {
+    "Train_Name_2" : "Train B",
+    "Coaches" : [ {
+      "Coach_Type_1" : "Two-tier",
+      "Coach_Name_1" : "2S",
+      "Coach_Fare_1" : 10,
+      "Seats" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Lower"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Middle"
+      } ]
+    }, {
+      "Coach_Name_2" : "A1",
+      "Coach_Type_2" : "AC",
+      "Coach_Fare_2" : 160,
+      "Seats" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Lower"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Middle"
+      } ]
+    } ],
+    "Train_Number_2" : 2345
+  } ]
+}
