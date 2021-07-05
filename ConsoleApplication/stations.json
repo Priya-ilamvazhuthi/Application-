@@ -1,0 +1,232 @@
+{
+  "Station_1" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Chennai Egmore",
+    "Station_Code" : "MS",
+    "Station_Address" : "Chennai Egmore"
+  },
+  "Station_2" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Tambaram",
+    "Station_Code" : "TBM",
+    "Station_Address" : "Tambaram"
+  },
+  "Station_5" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Thiruchirapalli junction",
+    "Station_Code" : "TPJ",
+    "Station_Address" : "Trichy"
+  },
+  "Station_6" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Thanjavur junction",
+    "Station_Code" : "TJ",
+    "Station_Address" : "Tanjore"
+  },
+  "Station_10" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Coimbatore Junction",
+    "Station_Code" : "CBE",
+    "Station_Address" : "Coimbatore"
+  },
+  "Station_3" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Chengalpattu junction",
+    "Station_Code" : "CGL",
+    "Station_Address" : "Chengalpattu"
+  },
+  "Station_4" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Vilupuram",
+    "Station_Code" : "VM",
+    "Station_Address" : "Vilupuram"
+  },
+  "Station_9" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Erode",
+    "Station_Code" : "ED",
+    "Station_Address" : "Erode"
+  },
+  "Station_7" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Madhurai Junction",
+    "Station_Code" : "MDU",
+    "Station_Address" : "Madurai"
+  },
+  "Station_8" : {
+    "Platforms" : [ {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_1" : [ {
+        "Sub_Platform_Type_1" : "Unreserved",
+        "Sub_Platform_Number_1" : 1
+      }, {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 2
+      } ],
+      "Platform_Number_1" : 1
+    }, {
+      "Platform_Length_1" : 1,
+      "Sub_Platform_2" : [ {
+        "Sub_Platform_Type_1" : "General",
+        "Sub_Platform_Number_1" : 1
+      } ],
+      "Platform_Number_1" : 1
+    } ],
+    "Station_Name" : "Salem",
+    "Station_Code" : "SA",
+    "Station_Address" : "Salem"
+  }
+}

@@ -1,55 +1,67 @@
 {
-  "Trains" : [ {
-      "Train_Name_1" : "Train A",
-      "Coaches" : [ {
-        "Coach_Type_1" : "Sleeper",
-        "Coach_Name_1" : "S1",
-        "Coach_Fare_1" : 10,
-        "Seats" : [ {
-          "Seat_Status_1" : "Available",
-          "Seat_Number_1" : 1,
-          "Seat_Type_1" : "Lower"
-        }, {
-          "Seat_Status_2" : "Available",
-          "Seat_Number_2" : 2,
-          "Seat_Type_2" : "Middle"
-        } ]
-      }, {
-        "Coach_Name_2" : "A1",
-        "Coach_Type_2" : "AC",
-        "Coach_Fare_2" : 160,
-        "Seats" : [ {
-          "Seat_Status_1" : "Available",
-          "Seat_Number_1" : 1,
-          "Seat_Type_1" : "Lower"
-        }, {
-          "Seat_Status_2" : "Available",
-          "Seat_Number_2" : 2,
-          "Seat_Type_2" : "Middle"
-        } ]
-      } ],
-      "Train_Number_1" : 1234
-    } ,
-    {
-    "Train_Name_2" : "Train B",
+  "Train_3" : {
+    "Train_Name" : "Cholan Express",
+    "Train_Number" : 3452,
     "Coaches" : [ {
       "Coach_Type_1" : "Two-tier",
       "Coach_Name_1" : "2S",
-      "Coach_Fare_1" : 10,
-      "Seats" : [ {
+      "Coach_Fare_1" : 80,
+      "Seats_1" : [ {
         "Seat_Status_1" : "Available",
         "Seat_Number_1" : 1,
-        "Seat_Type_1" : "Lower"
+        "Seat_Type_1" : "Sitting"
       }, {
         "Seat_Status_2" : "Available",
         "Seat_Number_2" : 2,
-        "Seat_Type_2" : "Middle"
+        "Seat_Type_2" : "Sitting"
       } ]
     }, {
-      "Coach_Name_2" : "A1",
+      "Coach_Name_2" : "3S",
+      "Coach_Type_2" : "Three-tier",
+      "Coach_Fare_2" : 90,
+      "Seats_2" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      } ]
+    } ],
+    "Operating_Days" : {
+      "Day_1" : "Monday",
+      "Day_2" : "Tuesday",
+      "Day_3" : "Wednesday",
+      "Day_4" : "Thursday",
+      "Day_5" : "Friday",
+      "Day_6" : "Saturday"
+    },
+    "Route" : [ {
+      "Stop_5" : "Coimbatore Junction",
+      "Stop_2" : "Tambaram",
+      "Stop_1" : "Chennai Egmore",
+      "Stop_4" : "Erode",
+      "Stop_3" : "Salem"
+    } ]
+  },
+  "Train_4" : {
+    "Train_Name" : "Pallavan Express",
+    "Train_Number" : 9671,
+    "Coaches" : [ {
+      "Coach_Type_1" : "Two-tier",
+      "Coach_Name_1" : "2S",
+      "Coach_Fare_1" : 80,
+      "Seats_1" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Sitting"
+      } ]
+    }, {
+      "Coach_Name_2" : "AC",
       "Coach_Type_2" : "AC",
-      "Coach_Fare_2" : 160,
-      "Seats" : [ {
+      "Coach_Fare_2" : 250,
+      "Seats_2" : [ {
         "Seat_Status_1" : "Available",
         "Seat_Number_1" : 1,
         "Seat_Type_1" : "Lower"
@@ -57,8 +69,194 @@
         "Seat_Status_2" : "Available",
         "Seat_Number_2" : 2,
         "Seat_Type_2" : "Middle"
+      }, {
+        "Seat_Type_3" : "Upper",
+        "Seat_Number_3" : 3,
+        "Seat_Status_3" : "Available"
       } ]
     } ],
-    "Train_Number_2" : 2345
-  } ]
+    "Operating_Days" : {
+      "Day_1" : "Sunday",
+      "Day_2" : "Monday",
+      "Day_7" : "Saturday",
+      "Day_3" : "Tuesday",
+      "Day_4" : "Wednesday",
+      "Day_5" : "Thursday",
+      "Day_6" : "Friday"
+    },
+    "Route" : [ {
+      "Stop_6" : "Thanjavur junction",
+      "Stop_5" : "Thiruchirapalli junction",
+      "Stop_7" : "Madhurai Junction",
+      "Stop_2" : "Tambaram",
+      "Stop_1" : "Chennai Egmore",
+      "Stop_4" : "Vilupuram",
+      "Stop_3" : "Chengalpattu junction"
+    } ]
+  },
+  "Train_5" : {
+    "Train_Name" : "Uzhavan Express",
+    "Train_Number" : 9671,
+    "Coaches" : [ {
+      "Coach_Type_1" : "Two-tier",
+      "Coach_Name_1" : "2S",
+      "Coach_Fare_1" : 80,
+      "Seats_1" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Sitting"
+      } ]
+    }, {
+      "Coach_Name_2" : "3S",
+      "Coach_Type_2" : "Three-tier",
+      "Coach_Fare_2" : 90,
+      "Seats_2" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      } ]
+    } ],
+    "Operating_Days" : {
+      "Day_1" : "Sunday",
+      "Day_2" : "Monday",
+      "Day_7" : "Saturday",
+      "Day_3" : "Tuesday",
+      "Day_4" : "Wednesday",
+      "Day_5" : "Thursday",
+      "Day_6" : "Friday"
+    },
+    "Route" : [ {
+      "Stop_6" : "Thanjavur junction",
+      "Stop_5" : "Thiruchirapalli junction",
+      "Stop_7" : "Madhurai Junction",
+      "Stop_2" : "Tambaram",
+      "Stop_1" : "Chennai Egmore",
+      "Stop_4" : "Vilupuram",
+      "Stop_3" : "Chengalpattu junction"
+    } ]
+  },
+  "Train_1" : {
+    "Train_Name" : "Guruvayur Express",
+    "Train_Number" : 5346,
+    "Coaches" : [ {
+      "Coach_Type_1" : "Two-tier",
+      "Coach_Name_1" : "2S",
+      "Coach_Fare_1" : 60,
+      "Seats_1" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Sitting"
+      } ]
+    }, {
+      "Coach_Name_2" : "S1",
+      "Coach_Type_2" : "Sleeper",
+      "Coach_Fare_2" : 150,
+      "Seats_2" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Lower"
+      } ]
+    }, {
+      "Coach_Type_3" : "Three-tier",
+      "Coach_Name_3" : "3S",
+      "Coach_Fare_3" : 85,
+      "Seats_3" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Lower"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Sitting"
+      }, {
+        "Seat_Type_3" : "Sitting",
+        "Seat_Number_3" : 3,
+        "Seat_Status_3" : "Blocked"
+      } ]
+    } ],
+    "Operating_Days" : {
+      "1" : "Sunday",
+      "2" : "Monday",
+      "3" : "Tuesday",
+      "4" : "Wednesday",
+      "5" : "Thursday",
+      "6" : "Friday",
+      "7" : "Saturday"
+    },
+    "Route" : [ {
+      "Stop_6" : "Thanjavur junction",
+      "Stop_5" : "Thiruchirapalli junction",
+      "Stop_7" : "Madhurai Junction",
+      "Stop_2" : "Tambaram",
+      "Stop_1" : "Chennai Egmore",
+      "Stop_4" : "Vilupuram",
+      "Stop_3" : "Chengalpattu junction"
+    } ]
+  },
+  "Train_2" : {
+    "Train_Name" : "Vaigai Express",
+    "Train_Number" : 2678,
+    "Coaches" : [ {
+      "Coach_Type_1" : "Sleeper",
+      "Coach_Name_1" : "S1",
+      "Coach_Fare_1" : 160,
+      "Seats_1" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Side Lower"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Side Upper"
+      } ]
+    }, {
+      "Coach_Name_2" : "AC",
+      "Coach_Type_2" : "AC",
+      "Coach_Fare_2" : 210,
+      "Seats_2" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Lower"
+      } ]
+    }, {
+      "Coach_Type_3" : "Two-tier",
+      "Coach_Name_3" : "2S",
+      "Coach_Fare_3" : 100,
+      "Seats_3" : [ {
+        "Seat_Status_1" : "Available",
+        "Seat_Number_1" : 1,
+        "Seat_Type_1" : "Sitting"
+      }, {
+        "Seat_Status_2" : "Available",
+        "Seat_Number_2" : 2,
+        "Seat_Type_2" : "Sitting"
+      }, {
+        "Seat_Type_3" : "Sitting",
+        "Seat_Number_3" : 3,
+        "Seat_Status_3" : "Available"
+      } ]
+    } ],
+    "Operating_Days" : {
+      "Day_1" : "Monday",
+      "Day_2" : "Tuesday",
+      "Day_3" : "Wednesday",
+      "Day_4" : "Thursday",
+      "Day_5" : "Friday",
+      "Day_6" : "Saturday"
+    },
+    "Route" : [ {
+      "Stop_2" : "Tambaram",
+      "Stop_1" : "Chennai Egmore",
+      "Stop_4" : "Madhurai Junction",
+      "Stop_3" : "Thanjavur junction"
+    } ]
+  }
 }

@@ -1,0 +1,31 @@
+{
+  "Ticket_1" : {
+    "Destination" : "Thiruchirapalli junction",
+    "Booking_ID" : "6766",
+    "Boarding Station" : "Chennai Egmore",
+    "Passengers" : [ {
+      "Passenger1_Coach_Name" : "3S",
+      "Passenger1_Booking_Status" : "Confirmed",
+      "Passenger3_Coach_Type" : "Three-tier",
+      "Passenger2_Seat_Number" : "2",
+      "Passenger3_Name" : "Nithya",
+      "Passenger3_Coach_Name" : "3S",
+      "Passenger2_Coach_Type" : "Three-tier",
+      "Passenger1_Seat_Number" : "2",
+      "Passenger2_Booking_Status" : "Confirmed",
+      "Passenger3_Seat_Number" : "2",
+      "Passenger3_Seat_Type" : "Sitting",
+      "Passenger2_Name" : "Nancy",
+      "Passenger2_Seat_Type" : "Sitting",
+      "Passenger3_Booking_Status" : "Waiting",
+      "Passenger1_Coach_Type" : "Three-tier",
+      "Passenger1_Seat_Type" : "Sitting",
+      "Passenger2_Coach_Name" : "3S",
+      "Passenger1_Name" : "Priya"
+    } ],
+    "Train_Name" : "Guruvayur Express",
+    "Train_Number" : "5346",
+    "Date" : "2021-07-06",
+    "Fare" : 382.5
+  }
+}
