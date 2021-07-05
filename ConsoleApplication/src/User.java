@@ -1,8 +1,8 @@
 package com.consoleApp;
 
 public class User {
-    public static String userID;
-    public static String userPassword;
+    private String userID;
+    private String userPassword;
 
     public void setUserID(String userID) {
         this.userID = userID;
@@ -10,5 +10,13 @@ public class User {
 
     public void setUserPassword(String password) {
         this.userPassword = password;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
     }
 }

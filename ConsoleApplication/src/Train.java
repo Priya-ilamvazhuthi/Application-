@@ -1,21 +1,21 @@
 package com.consoleApp;
 
 public class Train {
-    String trainName ;
-    int trainNumber;
-    int numOfCoaches;
+
+    private String trainName;
+    private int trainNumber;
+    private int numOfCoaches;
     Route route = new Route();
     Schedule schedule = new Schedule();
     Coach[] coaches;
 
-
-    void createCoach(){
+    void createCoach() {
         coaches = new Coach[numOfCoaches];
-        for(int i =0; i<numOfCoaches;i++){
-            coaches[i]= new Coach();
-
+        for (int i = 0; i < numOfCoaches; i++) {
+            coaches[i] = new Coach();
         }
     }
+
     public String getTrainName() {
         return trainName;
     }
@@ -39,6 +39,5 @@ public class Train {
     public void setNumOfCoaches(int numOfCoaches) {
         this.numOfCoaches = numOfCoaches;
     }
-
 
 }

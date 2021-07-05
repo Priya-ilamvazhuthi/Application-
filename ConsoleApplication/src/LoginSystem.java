@@ -8,66 +8,52 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.consoleApp.Admin.adminPassword;
-import static com.consoleApp.Admin.adminUserID;
-import static com.consoleApp.User.userID;
-import static com.consoleApp.User.userPassword;
-
-
-public class LoginSystem {
+abstract class LoginSystem {
     private String userEmail;
     private String password;
     private String filepath;
 
-    JSONObject jsonObject = new JSONObject();
-    JSONArray jsonArray = new JSONArray();
-    JSONParser jsonParser = new JSONParser();
-    Object object = null;
-
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getUserEmail() {
         return userEmail;
     }
+
     public String getPassword() {
         return password;
     }
 
-    boolean userLogin() {
+    boolean isUserLogin() {
         filepath = "user.json";
-        User user = new User();
-        setUserEmail(userID);
-        setPassword(userPassword);
         return checkFile(filepath);
     }
-    boolean adminLogin(){
+
+    boolean isAdminLogin() {
         filepath = "admin.json";
-        setUserEmail(adminUserID);
-        setPassword(adminPassword);
         return checkFile(filepath);
     }
 
     boolean validateUserID() {
-        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\."  +
-                "[a-zA-Z0-9_+&*-]+)*@"      +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,6}$"                ;
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z" + "A-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(getUserEmail());
         return matcher.matches();
     }
+
     boolean validatePassword() {
-        if (!(password.length() >= 8 && password.length() <= 15)) {
+        if (!(getPassword().length() >= 8 && getPassword().length() <= 15)) {
             return false;
         }
         boolean flag = false;
         for (int i = 0; i <= 9; i++) {
             String str1 = Integer.toString(i);
-            if (password.contains(str1)) {                                                 
+            if (getPassword().contains(str1)) {
                 flag = true;
                 break;
             }
@@ -75,24 +61,19 @@ public class LoginSystem {
         if (!flag) {
             return false;
         }
-        if (!(password.contains("@") || password.contains("#")
-                || password.contains("!") || password.contains("~")
-                || password.contains("$") || password.contains("%")
-                || password.contains("^") || password.contains("&")
-                || password.contains("*") || password.contains("(")
-                || password.contains(")") || password.contains("-")
-                || password.contains("+") || password.contains("/")
-                || password.contains(":") || password.contains(".")
-                || password.contains(", ") || password.contains("<")
-                || password.contains(">") || password.contains("?")
-                || password.contains("|"))) {
+        if (!(getPassword().contains("@") || getPassword().contains("#") || getPassword().contains("!") || getPassword().contains("~")
+                || getPassword().contains("$") || getPassword().contains("%") || getPassword().contains("^") || getPassword().contains("&")
+                || getPassword().contains("*") || getPassword().contains("(") || getPassword().contains(")") || getPassword().contains("-")
+                || getPassword().contains("+") || getPassword().contains("/") || getPassword().contains(":") || getPassword().contains(".")
+                || getPassword().contains(", ") || getPassword().contains("<") || getPassword().contains(">") || getPassword().contains("?")
+                || getPassword().contains("|"))) {
             return false;
         }
         flag = false;
         for (int i = 65; i <= 90; i++) {
             char c = (char) i;
             String str1 = Character.toString(c);
-            if (password.contains(str1)) {
+            if (getPassword().contains(str1)) {
                 flag = true;
                 break;
             }
@@ -104,7 +85,7 @@ public class LoginSystem {
         for (int i = 90; i <= 122; i++) {
             char c = (char) i;
             String str1 = Character.toString(c);
-            if (password.contains(str1)) {
+            if (getPassword().contains(str1)) {
                 flag = true;
                 break;
             }
@@ -113,16 +94,21 @@ public class LoginSystem {
     }
 
     boolean signUp() {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONParser jsonParser = new JSONParser();
+        Object object;
         filepath = "user.json";
-        if(checkFile(filepath)) {
+
+        if (checkFile(filepath)) {
             return false;
         }
-        try{
+        try {
             FileReader file = new FileReader(filepath);
-            object= jsonParser.parse(file);
-            jsonArray =(JSONArray) object;
+            object = jsonParser.parse(file);
+            jsonArray = (JSONArray) object;
             file.close();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error occurred");
         }
         jsonObject.put("User ID", getUserEmail());
@@ -138,12 +124,16 @@ public class LoginSystem {
         return true;
     }
 
-    boolean checkFile(String filepath){
+    boolean checkFile(String filepath) {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray;
+        JSONParser jsonParser = new JSONParser();
+        Object object;
         boolean flag = false;
-        try{
+        try {
             FileReader file = new FileReader(filepath);
-            object= jsonParser.parse(file);
-            jsonArray =(JSONArray) object;
+            object = jsonParser.parse(file);
+            jsonArray = (JSONArray) object;
             jsonObject.put("User ID", getUserEmail());
             jsonObject.put("Password", getPassword());
             for (Object o : jsonArray) {
@@ -152,13 +142,11 @@ public class LoginSystem {
                     break;
                 }
             }
-            jsonArray =(JSONArray) object;
             file.close();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error occurred");
         }
         return flag;
     }
-
 
 }
