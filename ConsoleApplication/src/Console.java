@@ -29,7 +29,7 @@ public class Console {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             do {
-                System.out.println("Enter a choice from above :");
+                System.out.print("Enter a choice from above : ");
                 choice = Integer.parseInt(input.readLine());
             } while (!(choice >= 1 && choice <= end));
         } catch (IOException | NumberFormatException ex) {

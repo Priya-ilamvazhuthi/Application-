@@ -11,22 +11,9 @@ public class EnquirePage extends BookingSystem{
     static JSONArray availableTrains;
     static String[] json;
 
-    EnquirePage(){
+    void enquiryInputs() {
         System.out.println("---------------Enquiry----------------");
         System.out.println();
-        enquiryInputs();
-        if(listAvailableTrains()) {
-            System.out.println("----------Available Trains------------");
-            printList(json);
-        }
-        else {
-            System.out.println("----------No Trains available---------");
-            UserUI.userLogged();
-        }
-        System.out.println();
-    }
-
-    void enquiryInputs() {
         int index;
         String[] stations = listStationName();
 
@@ -44,23 +31,33 @@ public class EnquirePage extends BookingSystem{
         setDestination(stations[index - 1]);
         System.out.println();
 
-        // Choose a travel date (either tomorrow or day after tomorrow)
+        // Choose a travel date (Only tomorrow as in tatkal)
         System.out.println("Choose the travel date");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calender = Calendar.getInstance();
         calender.add(Calendar.DAY_OF_MONTH, 1);
         String tomorrow_date = sdf.format(calender.getTime());
-        calender.add(Calendar.DAY_OF_MONTH, 1);
-        String day_after_tomorrow_date = sdf.format(calender.getTime());
 
+        sdf = new SimpleDateFormat("EEEE");
+        calender = Calendar.getInstance();
+        calender.add(Calendar.DAY_OF_MONTH,1);
+        String tomorrowDay = sdf.format(calender.getTime());
         System.out.println("[1] " + tomorrow_date);
-        System.out.println("[2] " + day_after_tomorrow_date);
-        index = Console.getChoice(2);
+
+        index = Console.getChoice(1);
 
         if (index == 1)
-            setTravelDate(tomorrow_date);
-        if (index == 2)
-            setTravelDate(tomorrow_date);
+            setTravelDate(tomorrowDay);
+
+        if(listAvailableTrains()) {
+            System.out.println("----------Available Trains------------");
+            printList(json);
+        }
+        else {
+            System.out.println("----------No Trains available---------");
+            UserUI.userLogged();
+        }
+        System.out.println();
     }
 
     boolean listAvailableTrains() {

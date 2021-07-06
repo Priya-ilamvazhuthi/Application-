@@ -6,32 +6,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.*;
 
 abstract class TrainSystem {
-
-    static JSONObject jsonObject = new JSONObject();
-    JSONObject trainObject = new JSONObject();
-    JSONArray jsonArray = new JSONArray();
-    static JSONParser jsonParser = new JSONParser();
-    JSONObject finalObject = new JSONObject();
-
-    JSONObject seatObject = new JSONObject();
-    JSONArray seatArray = new JSONArray();
-    JSONObject coachObject = new JSONObject();
-    JSONArray coachArray = new JSONArray();
-
-    JSONObject stationObject = new JSONObject();
-    JSONObject platformObject = new JSONObject();
-    JSONArray platformArray = new JSONArray();
-    JSONObject subPlatformObject = new JSONObject();
-    JSONArray subPlatformArray = new JSONArray();
-
     Train[] trains;
     Station[] stations;
-    int numOfTrains;
-    int numOfStations;
+    private int numOfTrains;
+    private int numOfStations;
     static final String filePath = "train.json";
 
     public int getNumOfTrains() {
@@ -50,8 +31,24 @@ abstract class TrainSystem {
         this.numOfStations = numOfStations;
     }
 
+    void createTrain() {
+        trains = new Train[getNumOfTrains()];
+        for (int i = 0; i < getNumOfTrains(); i++) {
+            trains[i] = new Train();
+        }
+    }
+
+    void createStation() {
+        stations = new Station[getNumOfStations()];
+        for (int i = 0; i < getNumOfStations(); i++) {
+            stations[i] = new Station();
+        }
+    }
+
     String[] listTrainName() {
         String[] trainList = new String[existingTrainsCount()];
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
         try {
             FileReader fileReader = new FileReader(filePath);
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
@@ -66,9 +63,10 @@ abstract class TrainSystem {
         return trainList;
     }
 
-    static String[] listStationName() {
-
+    String[] listStationName() {
         String[] trainList = new String[existingStationCount()];
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
         try {
             FileReader fileReader = new FileReader("stations.json");
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
@@ -85,12 +83,13 @@ abstract class TrainSystem {
 
     String[] listSchedule(int trainIndex) {
         String[] trainList = {};
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
         try {
             FileReader fileReader = new FileReader(filePath);
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
             JSONObject trains = (JSONObject) jsonObject.get("Train_" + trainIndex);
-            JSONArray tempArray = (JSONArray) trains.get("Route");
-            JSONObject route = (JSONObject) tempArray.get(0);
+            JSONObject route = (JSONObject) trains.get("Route");
             trainList = new String[(route.size())];
             for (int iterator = 1; iterator <= route.size(); iterator++) {
                 trainList[iterator - 1] = route.get("Stop_" + iterator).toString();
@@ -104,10 +103,12 @@ abstract class TrainSystem {
     }
 
     int coachLength(int index) {
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        JSONParser jsonParser = new JSONParser();
         try {
             FileReader reader = new FileReader(filePath);
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
+            jsonObject = (JSONObject) jsonParser.parse(reader);
             jsonObject = (JSONObject) jsonObject.get("Train_" + index);
             jsonArray = (JSONArray) jsonObject.get("Coaches");
         } catch (Exception e) {
@@ -136,6 +137,7 @@ abstract class TrainSystem {
     }
 
     void updateTrain(int trainNumber, String trainKey, String changeValue) {
+        JSONObject jsonObject;
         try {
             FileReader reader = new FileReader(filePath);
             JSONParser jsonParser = new JSONParser();
@@ -149,6 +151,7 @@ abstract class TrainSystem {
     }
 
     void updateTrain(int trainNumber, String trainKey, String[] array) {
+        JSONObject jsonObject;
         String key = "";
         if (trainKey.equals("Route"))
             key = "Stop_";
@@ -160,13 +163,10 @@ abstract class TrainSystem {
             jsonObject = (JSONObject) jsonParser.parse(reader);
             JSONObject tempObject = (JSONObject) jsonObject.get("Train_" + trainNumber);
             JSONObject tempObject1 = new JSONObject();
-            JSONArray tempArray = new JSONArray();
-            int routeIndex = 1;
             for (int i = 0; i < array.length; i++) {
                 tempObject1.put(key + (i + 1), array[i]);
             }
-            tempArray.add(tempObject1);
-            tempObject.replace(trainKey, tempArray);
+            tempObject.replace(trainKey, tempObject1);
             writeJson(jsonObject, filePath);
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,6 +174,7 @@ abstract class TrainSystem {
     }
 
     void updateTrain(String trainNumber, String coachKey, String newValue) {
+        JSONObject jsonObject;
         try {
             FileReader reader = new FileReader(filePath);
             JSONParser jsonParser = new JSONParser();
@@ -189,6 +190,7 @@ abstract class TrainSystem {
     }
 
     void updateTrain(String trainNumber, String seatNumber, String seatKey, String newValue) {
+        JSONObject jsonObject;
         try {
             FileReader reader = new FileReader(filePath);
             JSONParser jsonParser = new JSONParser();
@@ -204,21 +206,22 @@ abstract class TrainSystem {
         }
     }
 
-    void createTrain() {
-        trains = new Train[getNumOfTrains()];
-        for (int i = 0; i < getNumOfTrains(); i++) {
-            trains[i] = new Train();
-        }
-    }
-
-    void createStation() {
-        stations = new Station[getNumOfStations()];
-        for (int i = 0; i < getNumOfStations(); i++) {
-            stations[i] = new Station();
+    void cancelTrain(int trainIndex) {
+        JSONObject jsonObject;
+        try {
+            FileReader reader = new FileReader(filePath);
+            JSONParser jsonParser = new JSONParser();
+            jsonObject = (JSONObject) jsonParser.parse(reader);
+            jsonObject.remove("Train_" + trainIndex);
+            writeJson(jsonObject, filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     boolean trainExists(String trainName) {
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
         try {
             FileReader fileReader = new FileReader(filePath);
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
@@ -234,14 +237,39 @@ abstract class TrainSystem {
         return false;
     }
 
-    static int existingTrainsCount() {
+    boolean stationExists(String stationName) {
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
         try {
-            FileReader fileReader = new FileReader(filePath);
+
+            FileReader fileReader = new FileReader("stations.json");
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
+            JSONObject tempObject;
+            for (int i = 1; i <= existingStationCount(); i++) {
+                tempObject = (JSONObject) jsonObject.get("Station_" + i);
+                if (tempObject.get("Station_Name").toString().equals(stationName))
+                    return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return jsonObject.size();
+        return false;
+    }
+
+    boolean addStation() {
+        int flag = 0;
+        for (int i = 0; i < getNumOfStations(); i++) {
+            if (stationExists(stations[i].getStationName())) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 0) {
+            stationJson();
+            return true;
+        }
+        return false;
     }
 
     boolean addTrain() {
@@ -253,13 +281,58 @@ abstract class TrainSystem {
             }
         }
         if (flag == 0) {
-            addJson();
+            TrainJson();
             return true;
         }
         return false;
     }
 
-    void addJson() {
+    int existingTrainsCount() {
+        JSONObject jsonObject = new JSONObject();
+        JSONParser jsonParser = new JSONParser();
+        try {
+            FileReader fileReader = new FileReader(filePath);
+            jsonObject = (JSONObject) jsonParser.parse(fileReader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonObject.size();
+    }
+
+    int existingStationCount() {
+        JSONObject jsonObject = new JSONObject();
+        JSONParser jsonParser = new JSONParser();
+        try {
+            FileReader fileReader = new FileReader("stations.json");
+            jsonObject = (JSONObject) jsonParser.parse(fileReader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonObject.size();
+    }
+
+    static void writeJson(JSONObject finalObject, String fileName) {
+        try {
+            ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(finalObject);
+            FileWriter writer = new FileWriter(fileName);
+            writer.write(json);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void TrainJson() {
+        JSONObject jsonObject;
+        JSONObject trainObject;
+        JSONParser jsonParser = new JSONParser();
+        JSONObject finalObject = new JSONObject();
+        JSONObject seatObject;
+        JSONArray seatArray = new JSONArray();
+        JSONObject coachObject;
+        JSONArray coachArray = new JSONArray();
+
         try {
             FileReader fileReader = new FileReader(filePath);
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
@@ -317,58 +390,16 @@ abstract class TrainSystem {
         writeJson(finalObject, filePath);
     }
 
-    static void writeJson(JSONObject finalObject, String fileName) {
-        try {
-            ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(finalObject);
-            FileWriter writer = new FileWriter(fileName);
-            writer.write(json);
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    void stationJson() {
+        JSONObject jsonObject;
+        JSONParser jsonParser = new JSONParser();
+        JSONObject finalObject = new JSONObject();
+        JSONObject stationObject;
+        JSONObject platformObject;
+        JSONArray platformArray = new JSONArray();
+        JSONObject subPlatformObject;
+        JSONArray subPlatformArray = new JSONArray();
 
-    void cancelTrain(int trainIndex) {
-        try {
-            FileReader reader = new FileReader(filePath);
-            JSONParser jsonParser = new JSONParser();
-            jsonObject = (JSONObject) jsonParser.parse(reader);
-            jsonObject.remove("Train_" + trainIndex);
-            writeJson(jsonObject, filePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    static int existingStationCount() {
-        try {
-            FileReader fileReader = new FileReader("stations.json");
-            jsonObject = (JSONObject) jsonParser.parse(fileReader);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return jsonObject.size();
-    }
-
-    boolean stationExists(String stationName) {
-        try {
-
-            FileReader fileReader = new FileReader("stations.json");
-            jsonObject = (JSONObject) jsonParser.parse(fileReader);
-            JSONObject tempObject;
-            for (int i = 1; i <= existingStationCount(); i++) {
-                tempObject = (JSONObject) jsonObject.get("Station_" + i);
-                if (tempObject.get("Station_Name").toString().equals(stationName))
-                    return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    void addJson1() {
         try {
             FileReader fileReader = new FileReader("stations.json");
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
@@ -411,20 +442,4 @@ abstract class TrainSystem {
         writeJson(finalObject, "stations.json");
     }
 
-    boolean addStation() {
-        int flag = 0;
-        for (int i = 0; i < getNumOfStations(); i++) {
-            if (stationExists(stations[i].getStationName())) {
-                flag = 1;
-                break;
-            }
-        }
-
-        if (flag == 0) {
-            addJson1();
-            return true;
-        }
-
-        return false;
-    }
 }

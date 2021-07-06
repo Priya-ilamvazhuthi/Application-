@@ -31,10 +31,13 @@ public class UserUI extends LoginSystem {
         System.out.println();
         int choice = Console.getChoice(6);
         switch (choice) {
-            case 1 -> new EnquirePage();
+            case 1 -> {
+                EnquirePage enquiry =new EnquirePage();
+                enquiry.enquiryInputs();
+                UserUI.userLogged();
+            }
             case 2 -> new ViewSchedulePage();
             case 3 -> {
-                new EnquirePage();
                 new BookingPage();
             }
             case 4 -> new ViewStatusPage();
