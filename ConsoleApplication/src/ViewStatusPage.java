@@ -1,8 +1,5 @@
 package com.consoleApp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.simple.JSONObject;
 
 public class ViewStatusPage extends BookingSystem{
@@ -16,6 +13,7 @@ public class ViewStatusPage extends BookingSystem{
     void viewStatusInputs() {
         String[] bookingHistory = listBooking();
         System.out.println("-----------Booking History------------");
+        System.out.println();
         for (int i = 0; i < bookingHistory.length; i++) {
             System.out.println("[" + (i + 1) + "] " + bookingHistory[i]);
         }
@@ -24,12 +22,6 @@ public class ViewStatusPage extends BookingSystem{
         JSONObject obj = viewStatus(bookingHistory[choice - 1]);
         System.out.println("-----------Booking status-------------");
         System.out.println();
-        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
-            System.out.println(json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        Console.display(obj);
     }
 }

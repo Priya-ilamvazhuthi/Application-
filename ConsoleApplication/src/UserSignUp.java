@@ -5,6 +5,7 @@ public class UserSignUp extends LoginSystem{
 
     UserSignUp(){
         System.out.println("------------Signing up User-----------");
+        System.out.println();
         addUserCredentials();
         userSignUp();
     }
@@ -38,5 +39,6 @@ public class UserSignUp extends LoginSystem{
                 Console.welcomePage();
             }
         }
+        System.out.println();
     }
 }

@@ -11,12 +11,12 @@ public class PaymentPage extends BookingSystem{
     }
 
     static boolean getConfirmation(int fare) {
-        System.out.println();
         System.out.println("Total booking fare     :   " + fare);
         System.out.println("Tax (5%)               :   " + (fare * 0.05));
         System.out.println("Total fare to be paid  :   " + (fare + (fare * 0.05)));
-        System.out.print("Proceed to payment? y/n :");
+        System.out.print("Proceed to payment? y/n : ");
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println();
         try {
             if (input.readLine().equals("y")) {
                 return true;

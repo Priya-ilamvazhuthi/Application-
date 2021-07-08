@@ -22,11 +22,13 @@ public class AdminUI extends LoginSystem{
             System.out.println("-----Admin logged in successfully-----");
             adminLoggedIn();
         }
+        System.out.println();
     }
 
     static void adminLoggedIn() {
         System.out.println(
                 "Choose one option: \n[1] Add a train\n[2] Edit a train \n[3] Cancel a train\n[4] Add a station\n[5] Logout");
+        System.out.println();
         int choice = Console.getChoice(5);
         switch (choice) {
             case 1 -> new AddTrainUI();

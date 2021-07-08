@@ -12,13 +12,16 @@ public class AddTrainUI extends TrainSystem{
     }
 
     AddTrainUI() {
+        System.out.println();
         System.out.println("-------------Adding Train-------------");
+        System.out.println();
         addTrainInputs();
         if (addTrain()) {
             System.out.println("-------Train added successfully-------");
         } else {
             System.out.println("---------Train already exists---------");
         }
+        System.out.println();
         AdminUI.adminLoggedIn();
     }
 

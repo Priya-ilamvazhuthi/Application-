@@ -5,7 +5,6 @@ public class CancelTicketUI extends BookingSystem {
         System.out.println("----------Ticket Cancellation---------");
         System.out.println();
         cancelTicketInputs();
-        updateOnCancel();
         System.out.println("----Ticket Cancelled Successfully----");
         System.out.println();
         UserUI.userLogged();
@@ -13,6 +12,7 @@ public class CancelTicketUI extends BookingSystem {
     void cancelTicketInputs() {
         String[] bookingHistory = listBooking();
         System.out.println("-----------Booking History------------");
+        System.out.println();
         for (int i = 0; i < bookingHistory.length; i++) {
             System.out.println("[" + (i + 1) + "] " + bookingHistory[i]);
         }

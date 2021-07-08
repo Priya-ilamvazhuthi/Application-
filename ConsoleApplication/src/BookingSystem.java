@@ -7,12 +7,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
-
 
 public class BookingSystem extends TrainSystem {
     final private String ticketFilePath = "tickets.json";
@@ -24,7 +22,6 @@ public class BookingSystem extends TrainSystem {
     private int numOfTickets;
     private int boardingTrainIndex;
     private int boardingCoachIndex;
-    private int cancelledNumOfTickets = getNumOfTickets();
 
     Passenger[] passengers;
     Ticket ticket = new Ticket();
@@ -156,34 +153,74 @@ public class BookingSystem extends TrainSystem {
         ticket.setBookingID(id);
     }
 
-    void updateOnCancel() {
+    void updateOnCancel(String cancelledTrain, String cancelledCoach, int cancelledNumOfTickets) {
         JSONObject jsonObject;
         JSONParser jsonParser = new JSONParser();
         JSONObject ticketObject;
         JSONArray passengerArray;
         JSONObject passengerObject;
-        JSONArray jsonArray;
-        for(int i = 0 ; cancelledNumOfTickets <=0 ; i++) {
-            try {
-                FileReader fileReader = new FileReader(ticketFilePath);
-                jsonObject = (JSONObject) jsonParser.parse(fileReader);
-                for (int ticketIndex = 0; ticketIndex < existingTicketsCount(); ticketIndex++) {
+
+        try {
+            FileReader fileReader = new FileReader(ticketFilePath);
+            jsonObject = (JSONObject) jsonParser.parse(fileReader);
+            while (cancelledNumOfTickets > 0) {
+                for (int ticketIndex = 1; ticketIndex <= existingTicketsCount(); ticketIndex++) {
                     ticketObject = (JSONObject) jsonObject.get("Ticket_" + ticketIndex);
-                    passengerArray = (JSONArray) ticketObject.get("Passengers");
-                    passengerObject = (JSONObject) passengerArray.get(0);
-                    for (int passengerIndex = 0; passengerIndex < (passengerObject.size() / 6); passengerIndex++) {
-                        if(passengerObject.get("Passenger" + passengerIndex + "_BookingStatus").toString().equals("Waiting")) {
-                            passengerObject.replace("Passenger" + passengerIndex + "_BookingStatus","Confirmed");
-                            cancelledNumOfTickets--;
+                    if (ticketObject.get("Train_Name").toString().equals(cancelledTrain)) {
+                        passengerArray = (JSONArray) ticketObject.get("Passengers");
+                        passengerObject = (JSONObject) passengerArray.get(0);
+                        for (int seatIndex = 1; seatIndex <= (passengerObject.size() / 6); seatIndex++) {
+                            if (passengerObject.get("Passenger" + seatIndex + "_Coach_Name").equals(cancelledCoach)) {
+                                if (passengerObject.get("Passenger" + seatIndex + "_Booking_Status")
+                                        .equals("Waiting")) {
+                                    passengerObject.replace("Passenger" + seatIndex + "_Booking_Status", "Confirmed");
+                                    cancelledNumOfTickets--;
+                                }
+                            }
+                            if (cancelledNumOfTickets == 0)
+                                break;
                         }
                     }
+                    if (cancelledNumOfTickets == 0)
+                        break;
                 }
-
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                writeJson(jsonObject, ticketFilePath);
+                if (cancelledNumOfTickets > 0) {
+                    fileReader = new FileReader(filePath);
+                    jsonObject = (JSONObject) jsonParser.parse(fileReader);
+                    for (int trainIndex = 1; trainIndex <= existingTrainsCount(); trainIndex++) {
+                        JSONObject trainObject = (JSONObject) jsonObject.get("Train_" + trainIndex);
+                        if (trainObject.get("Train_Name").toString().equals(cancelledTrain)) {
+                            JSONArray coachArray = (JSONArray) trainObject.get("Coaches");
+                            for (int coachIndex = 1; coachIndex <= coachArray.size(); coachIndex++) {
+                                JSONObject coachObject = (JSONObject) coachArray.get((coachIndex - 1));
+                                if (coachObject.get("Coach_Name_" + coachIndex).toString().equals(cancelledCoach)) {
+                                    JSONArray seatArray = (JSONArray) coachObject.get("Seats_" + coachIndex);
+                                    for (int seatIndex = 1; seatIndex <= seatArray.size(); seatIndex++) {
+                                        JSONObject seatObject = (JSONObject) seatArray.get((seatIndex - 1));
+                                        if (seatObject.get("Seat_Status_" + seatIndex).toString().equals("Booked")) {
+                                            seatObject.replace("Seat_Status_" + seatIndex, "Available");
+                                            cancelledNumOfTickets--;
+                                        }
+                                        if (cancelledNumOfTickets == 0)
+                                            break;
+                                    }
+                                }
+                                if (cancelledNumOfTickets == 0)
+                                    break;
+                            }
+                        }
+                        if (cancelledNumOfTickets == 0)
+                            break;
+                    }
+                    writeJson(jsonObject, filePath);
+                }
             }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
     }
 
     void updateStatus() {
@@ -200,9 +237,8 @@ public class BookingSystem extends TrainSystem {
             JSONObject coachObject = (JSONObject) jsonArray.get(getBoardingCoachIndex() - 1);
             JSONArray seatArray = (JSONArray) coachObject.get("Seats_" + getBoardingCoachIndex());
             int count = 1;
-            System.out.println(seatArray.size());
             for (int i = 1; i <= seatArray.size(); i++) {
-                JSONObject seatObject = (JSONObject) seatArray.get(0);
+                JSONObject seatObject = (JSONObject) seatArray.get((i - 1));
                 if (seatObject.get("Seat_Status_" + i).toString().equals("Available")) {
                     seatObject.replace("Seat_Status_" + i, "Booked");
                     count++;
@@ -210,6 +246,7 @@ public class BookingSystem extends TrainSystem {
                 if (count > numOfTickets)
                     break;
             }
+            writeJson(jsonObject, filePath);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -220,17 +257,25 @@ public class BookingSystem extends TrainSystem {
         JSONParser jsonParser = new JSONParser();
         try {
             FileReader fileReader = new FileReader(ticketFilePath);
-            jsonObject = (JSONObject) jsonParser.parse(fileReader);
-            System.out.println("c  "+jsonObject);
-            jsonObject.remove("Ticket_" + ticketNumber);
+            JSONObject ticketObject = (JSONObject) jsonParser.parse(fileReader);
+            jsonObject = (JSONObject) ticketObject.get("Ticket_" + ticketNumber);
+            String cancelledTrain = jsonObject.get("Train_Name").toString();
+            JSONArray passengerArray = (JSONArray) jsonObject.get("Passengers");
+            JSONObject passengerObject = (JSONObject) passengerArray.get(0);
+            int cancelledNumOfTickets = (passengerObject.size() / 6);
+            JSONObject coachObject = (JSONObject) passengerArray.get(0);
+            String cancelledCoach = coachObject.get("Passenger1_Coach_Name").toString();
+            ticketObject.remove("Ticket_" + ticketNumber);
             JSONObject finalObject = new JSONObject();
             int ticketIndex = 1;
             for (int i = 1; i < existingTicketsCount(); i++) {
                 if (ticketIndex == ticketNumber)
                     ticketIndex++;
-                finalObject.put("Ticket_" + i, jsonObject.get("Ticket_" + ticketIndex++));
+                finalObject.put("Ticket_" + i, ticketObject.get("Ticket_" + ticketIndex++));
             }
-            writeJson(finalObject,ticketFilePath);
+            writeJson(finalObject, ticketFilePath);
+            updateOnCancel(cancelledTrain, cancelledCoach, cancelledNumOfTickets);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -258,6 +303,7 @@ public class BookingSystem extends TrainSystem {
         JSONParser jsonParser = new JSONParser();
         JSONArray availableTrainArray = new JSONArray();
         try {
+
             FileReader fileReader = new FileReader("train.json");
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
             for (int trainIterator = 1; trainIterator <= existingTrainsCount(); trainIterator++) {
@@ -269,27 +315,23 @@ public class BookingSystem extends TrainSystem {
                         if (operatingDays.get("Day_" + dayIterator).toString().equals(getTravelDate())) {
                             for (int routeIterator = 1; routeIterator <= route.size(); routeIterator++) {
                                 if (route.get("Stop_" + routeIterator).toString().equals(getBoardingStation())) {
-                                    for (int j = trainIterator + 1; j < route.size(); j++) {
+                                    for (int j = 1; j < route.size(); j++) {
                                         if (route.get("Stop_" + j).toString().equals(getDestination())) {
                                             availableTrainArray.add(trains);
+                                            break;
                                         }
                                     }
                                 }
-
                             }
                         }
                     }
                 }
             }
         } catch (NullPointerException e) {
+            System.out.println();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-        String[] availableTrains = new String[availableTrainArray.size()];
-        for (int i = 0; i < availableTrainArray.size(); i++) {
-            availableTrains[i] = availableTrainArray.get(i).toString();
-        }
-
         return availableTrainArray;
     }
 
@@ -314,10 +356,7 @@ public class BookingSystem extends TrainSystem {
                     break;
                 }
             }
-        } catch (FileNotFoundException | ClassCastException e) {
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (ClassCastException | IOException | ParseException e) {
             e.printStackTrace();
         }
         return finalObject;

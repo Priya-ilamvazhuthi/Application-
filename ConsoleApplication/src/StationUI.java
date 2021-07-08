@@ -12,6 +12,7 @@ public class StationUI extends TrainSystem {
         } else {
             System.out.println("--------Station already exists--------");
         }
+        System.out.println();
         AdminUI.adminLoggedIn();
     }
     void stationAddInputs() {

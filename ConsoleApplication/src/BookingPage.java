@@ -1,6 +1,5 @@
 package com.consoleApp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -15,8 +14,11 @@ public class BookingPage extends BookingSystem {
 
     BookingPage(){
         System.out.println("---------------Booking----------------");
-        EnquirePage enquiry = new EnquirePage();
-        enquiry.enquiryInputs();
+        System.out.println();
+        new EnquirePage();
+        setBoardingStation(EnquirePage.source);
+        setDestination(EnquirePage.destination);
+        setTravelDate(EnquirePage.travelDate);
         bookingInputs();
         int fare = getTotalFare();
         if(PaymentPage.getConfirmation(fare)) {
@@ -25,6 +27,7 @@ public class BookingPage extends BookingSystem {
             System.out.println("Your booking ID is:" + ticket.getBookingID());
         }
         else {
+            System.out.println();
             System.out.println("------Ticket booked Unsuccessful------");
         }
         System.out.println();
@@ -32,8 +35,8 @@ public class BookingPage extends BookingSystem {
     }
 
     void bookingInputs() {
-        System.out.println();
         System.out.println("Enter the train ");
+        System.out.println();
         index = Console.getChoice(EnquirePage.availableTrains.size());
         JSONObject jsonObject = (JSONObject) EnquirePage.availableTrains.get((index - 1));
         String boardingTrain = jsonObject.get("Train_Name").toString();
@@ -43,18 +46,24 @@ public class BookingPage extends BookingSystem {
         setBoardingTrainNumber(boardingTrainNum);
         setBoardingTrain(boardingTrain);
 
-        System.out.println();
         System.out.println("Select the coach ");
+        System.out.println();
+
         try {
             Object obj = EnquirePage.availableTrains.get((index - 1));
             JSONArray jsonArray = new JSONArray();
             jsonArray.add(obj);
             jsonObject = (JSONObject) jsonArray.get(0);
             JSONArray coachArray = (JSONArray) jsonObject.get("Coaches");
+
             for (int i = 0; i < coachArray.size(); i++) {
-                ObjectMapper mapper = new ObjectMapper();
-                String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(coachArray.get(i));
-                System.out.println("[" + (i + 1) + "] " + json);
+                JSONObject coachObject = (JSONObject) coachArray.get(i);
+                System.out.println("["+(i+1)+"] Coach Name                :  "+coachObject.get("Coach_Name_"+(i+1)));
+                System.out.println("    Coach Type                :  "+coachObject.get("Coach_Type_"+(i+1)));
+                System.out.println("    Fare                      :  "+coachObject.get("Coach_Fare_"+(i+1)));
+                System.out.println("    Available number of seats :  "+EnquirePage.seatsOnCoach[getBoardingTrainIndex()-1][i]);
+                System.out.println("    Total number of Seats     :  "+EnquirePage.totalSeats[getBoardingTrainIndex()-1][i]);
+                System.out.println();
             }
 
             int coachIndex = Console.getChoice(coachArray.size());
@@ -64,15 +73,16 @@ public class BookingPage extends BookingSystem {
             coachType = coachObject.get("Coach_Type_" + coachIndex).toString();
             fare = Integer.parseInt(coachObject.get("Coach_Fare_" + coachIndex).toString());
             getSeat(coachArray, coachIndex);
-        } catch (IOException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
 
     void getSeat(JSONArray coachArray, int index1) {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println();
+
         System.out.print("Enter the number of Seats : ");
+        System.out.println();
         int numOfTickets = 0;
         try {
             numOfTickets = Integer.parseInt(input.readLine());
@@ -91,19 +101,12 @@ public class BookingPage extends BookingSystem {
             }
         }
 
-        String[] availSeat = new String[count];
-        String[] availSeatType = new String[count];
-        for (int i = 0; i < seatArray.size(); i++) {
-            JSONObject newObject = (JSONObject) seatArray.get(i);
-            if (newObject.get("Seat_Status_" + (i + 1)).toString().equals("Available")) {
-                int k = 0;
-                availSeat[k] = newObject.get("Seat_Number_" + (i + 1)).toString();
-                availSeatType[k] = newObject.get("Seat_Type_" + (i + 1)).toString();
-                k++;
-            }
-        }
-
         System.out.println();
+        if(numOfTickets > EnquirePage.totalSeats[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]) {
+            System.out.println("Number of seats exceeds seats on coach");
+            System.out.println();
+            new BookingPage();
+        }
         if (numOfTickets > count) {
             System.out.println("--Some seats will be in waiting list--");
         } else {
@@ -114,17 +117,16 @@ public class BookingPage extends BookingSystem {
 
         setNumOfTickets(numOfTickets);
         createPassengers();
-
         for (int i = 0; i < numOfTickets; i++) {
             try {
-                int k = 0;
-                passengers[i].setBookedSeat(availSeat[k]);
-                passengers[i].setBookedSeatType(availSeatType[k]);
+                passengers[i].setBookedSeat(EnquirePage.availSeat[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]);
+                passengers[i].setBookedSeatType(EnquirePage.availSeat[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]);
                 passengers[i].setBookedCoach(coachName);
                 passengers[i].setBookedCoachType(coachType);
-                k++;
-                if (i > (availSeat.length - 1))
+                if(i >= EnquirePage.seatsOnCoach[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]) {
+
                     passengers[i].setBookingStatus("Waiting");
+                }
                 else
                     passengers[i].setBookingStatus("Confirmed");
                 ticket.setFare(fare);

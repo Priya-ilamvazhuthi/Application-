@@ -1,83 +1,160 @@
 package com.consoleApp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 
 public class EnquirePage extends BookingSystem{
     static JSONArray availableTrains;
-    static String[] json;
+    static String source, destination, travelDate;
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+    EnquirePage(){
+        enquiryInputs();
+        listAvailableTrains();
+        System.out.println();
+    }
 
     void enquiryInputs() {
-        System.out.println("---------------Enquiry----------------");
-        System.out.println();
         int index;
         String[] stations = listStationName();
-
-        // Choose a station from station list as source
-        System.out.println("Choose the boarding station");
-        printList(stations);
-        index = Console.getChoice( stations.length );
-        setBoardingStation(stations[index - 1]);
+        System.out.println("-----------Boarding Station-----------");
+        System.out.println();
+        System.out.println("Choose an option:");
+        System.out.println("[1] Search by Station Name");
+        System.out.println("[2] Choose from list of stations");
+        int choice = Console.getChoice(2);
         System.out.println();
 
-        // Choose a station from station list as destination
-        System.out.println("Choose the destination station");
-        printList(stations);
-        index = Console.getChoice( stations.length );
-        setDestination(stations[index - 1]);
-        System.out.println();
-
-        // Choose a travel date (Only tomorrow as in tatkal)
-        System.out.println("Choose the travel date");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calender = Calendar.getInstance();
-        calender.add(Calendar.DAY_OF_MONTH, 1);
-        String tomorrow_date = sdf.format(calender.getTime());
-
-        sdf = new SimpleDateFormat("EEEE");
-        calender = Calendar.getInstance();
-        calender.add(Calendar.DAY_OF_MONTH,1);
-        String tomorrowDay = sdf.format(calender.getTime());
-        System.out.println("[1] " + tomorrow_date);
-
-        index = Console.getChoice(1);
-
-        if (index == 1)
-            setTravelDate(tomorrowDay);
-
-        if(listAvailableTrains()) {
-            System.out.println("----------Available Trains------------");
-            printList(json);
+        if(choice == 1) {
+            System.out.print("Enter boarding station Name : ");
+            try {
+                source = input.readLine();
+                setBoardingStation(source);
+                System.out.println();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        else {
-            System.out.println("----------No Trains available---------");
-            UserUI.userLogged();
-        }
-        System.out.println();
-    }
 
-    boolean listAvailableTrains() {
-        availableTrains = listTrains();
+        if(choice == 2) {
+            System.out.println("Choose the boarding station");
+            printList(stations);
+            index = Console.getChoice(stations.length);
+            setBoardingStation(stations[index - 1]);
+            source = stations[index - 1];
+            System.out.println();
+        }
+
+        System.out.println("---------Destination station----------");
+        System.out.println();
+        System.out.println("Choose an option:");
+        System.out.println("[1] Search by Station Name");
+        System.out.println("[2] Choose from list of stations");
+        System.out.println();
+        choice = Console.getChoice(2);
+
+        if(choice == 1) {
+            System.out.print("Enter destination station Name : ");
+            try {
+                destination = input.readLine();
+                setDestination(destination);
+                System.out.println();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if(choice == 2) {
+            System.out.println("Choose the destination station");
+            printList(stations);
+            index = Console.getChoice(stations.length);
+            setDestination(stations[index - 1]);
+            destination = stations[index - 1];
+            System.out.println();
+        }
+
+        System.out.print("Enter travel date (Format : yyyy-mm-dd) : ");
+
+        String date;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            if (availableTrains.size() == 0) {
-                return false;
-            } else {
-                json = new String[availableTrains.size()];
-                for (int i = 0; i < availableTrains.size(); i++) {
-                    Object ob = availableTrains.get(i);
-                    json[i] = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(ob);
+            date = input.readLine();
+            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+            String tomorrowDay = sdf.format(date1);
+            setTravelDate(tomorrowDay);
+            travelDate = tomorrowDay;
+            System.out.println();
+        } catch (IOException | ParseException e) {
+            System.out.println("Error with date");
+            enquiryInputs();
+        }
+    }
+    static int[][] seatsOnCoach;
+    static int[][] totalSeats;
+    static String[][] availSeat;
+    static String[][] availSeatType;
+    void listAvailableTrains() {
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+        availableTrains = listTrains();
+            if(availableTrains.size() == 0){
+                System.out.println("--------No Available Trains-----------");
+                System.out.println();
+                UserUI.userLogged();
+            }
+            else {
+                System.out.println("----------Available Trains------------");
+                System.out.println();
+                seatsOnCoach =new int[existingTrainsCount()][3];
+                totalSeats = new int[existingTrainsCount()][3];
+                availSeat = new String[existingTrainsCount()][4];
+                availSeatType = new String[4][4];
+
+                for(int trainIndex =0 ; trainIndex < availableTrains.size() ; trainIndex ++) {
+
+                    System.out.println("--------------------------------------");
+                    jsonObject = (JSONObject) availableTrains.get(trainIndex);
+                    System.out.println("["+(trainIndex+1)+"] Train Name                  : " + jsonObject.get("Train_Name"));
+
+                    System.out.println("    Train Number                : "+ jsonObject.get("Train_Number"));
+                    JSONArray coachArray = (JSONArray) jsonObject.get("Coaches");
+                    for (int coachIndex = 1; coachIndex <= coachArray.size(); coachIndex++) {
+
+                        JSONObject coachObject = (JSONObject) coachArray.get(coachIndex - 1);
+                        System.out.println("    Coach " + coachIndex + " Name                : "+ coachObject.get("Coach_Name_" + coachIndex));
+                        System.out.println("    Coach " + coachIndex + " Type                : "+ coachObject.get("Coach_Type_" + coachIndex));
+                        jsonArray = (JSONArray) coachObject.get("Seats_" + coachIndex);
+
+                        int count = 0;
+                        int seatCount = 0;
+
+                        for (int seatIndex = 1; seatIndex <= jsonArray.size(); seatIndex++) {
+                            JSONObject tempObject = (JSONObject) jsonArray.get(seatIndex - 1);
+                            seatCount++;
+                            if (tempObject.get("Seat_Status_" + seatIndex).toString().equals("Available")) {
+                                availSeat[trainIndex][count] = tempObject.get("Seat_Number_"+seatIndex).toString();
+                                availSeatType[trainIndex][count] = tempObject.get("Seat_Type_"+seatIndex).toString();
+                                count++;
+                            }
+                        }
+                        System.out.println("    Available Seats on coach " + coachIndex +"  : " +count);
+                        System.out.println("    Total number of seats       : "+ jsonArray.size());
+                        seatsOnCoach[trainIndex][coachIndex-1] = count;
+                        totalSeats[trainIndex][coachIndex-1] = seatCount;
+                        System.out.println();
+                    }
                 }
             }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return true;
     }
+
     static void printList(String[] stations) {
         for (int i = 0; i < stations.length; i++) {
             System.out.println("[" + (i + 1) + "] " + stations[i]);
