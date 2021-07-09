@@ -10,12 +10,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EnquirePage extends BookingSystem{
+public class EnquirePage extends BookingSystem {
     static JSONArray availableTrains;
     static String source, destination, travelDate;
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-    EnquirePage(){
+    EnquirePage() {
         enquiryInputs();
         listAvailableTrains();
         System.out.println();
@@ -32,7 +32,7 @@ public class EnquirePage extends BookingSystem{
         int choice = Console.getChoice(2);
         System.out.println();
 
-        if(choice == 1) {
+        if (choice == 1) {
             System.out.print("Enter boarding station Name : ");
             try {
                 source = input.readLine();
@@ -43,7 +43,7 @@ public class EnquirePage extends BookingSystem{
             }
         }
 
-        if(choice == 2) {
+        if (choice == 2) {
             System.out.println("Choose the boarding station");
             printList(stations);
             index = Console.getChoice(stations.length);
@@ -60,7 +60,7 @@ public class EnquirePage extends BookingSystem{
         System.out.println();
         choice = Console.getChoice(2);
 
-        if(choice == 1) {
+        if (choice == 1) {
             System.out.print("Enter destination station Name : ");
             try {
                 destination = input.readLine();
@@ -72,7 +72,7 @@ public class EnquirePage extends BookingSystem{
 
         }
 
-        if(choice == 2) {
+        if (choice == 2) {
             System.out.println("Choose the destination station");
             printList(stations);
             index = Console.getChoice(stations.length);
@@ -86,10 +86,12 @@ public class EnquirePage extends BookingSystem{
         String date;
         try {
             date = input.readLine();
+            BoardingDate = date;
             Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
             String tomorrowDay = sdf.format(date1);
-            setTravelDate(tomorrowDay);
+            setTravelDay(tomorrowDay);
             travelDate = tomorrowDay;
             System.out.println();
         } catch (IOException | ParseException e) {
@@ -97,62 +99,63 @@ public class EnquirePage extends BookingSystem{
             enquiryInputs();
         }
     }
+
     static int[][] seatsOnCoach;
     static int[][] totalSeats;
-    static String[][] availSeat;
-    static String[][] availSeatType;
+    static String[][][] availSeat;
+    static String[][][] availSeatType;
+
     void listAvailableTrains() {
         JSONObject jsonObject;
         JSONArray jsonArray;
         availableTrains = listTrains();
-            if(availableTrains.size() == 0){
-                System.out.println("--------No Available Trains-----------");
-                System.out.println();
-                UserUI.userLogged();
-            }
-            else {
-                System.out.println("----------Available Trains------------");
-                System.out.println();
-                seatsOnCoach =new int[existingTrainsCount()][3];
-                totalSeats = new int[existingTrainsCount()][3];
-                availSeat = new String[existingTrainsCount()][4];
-                availSeatType = new String[4][4];
+        if (availableTrains.size() == 0) {
+            System.out.println("--------No Available Trains-----------");
+            System.out.println();
+            UserUI.userLogged();
+        } else {
+            System.out.println("----------Available Trains------------");
+            System.out.println();
+            seatsOnCoach = new int[existingTrainsCount()][3];
+            totalSeats = new int[existingTrainsCount()][3];
+            availSeat = new String[existingTrainsCount()][4][4];
+            availSeatType = new String[4][4][4];
 
-                for(int trainIndex =0 ; trainIndex < availableTrains.size() ; trainIndex ++) {
+            for (int trainIndex = 0; trainIndex < availableTrains.size(); trainIndex++) {
 
-                    System.out.println("--------------------------------------");
-                    jsonObject = (JSONObject) availableTrains.get(trainIndex);
-                    System.out.println("["+(trainIndex+1)+"] Train Name                  : " + jsonObject.get("Train_Name"));
+                System.out.println("--------------------------------------");
+                jsonObject = (JSONObject) availableTrains.get(trainIndex);
+                System.out.println("[" + (trainIndex + 1) + "] Train Name                  : " + jsonObject.get("Train_Name"));
 
-                    System.out.println("    Train Number                : "+ jsonObject.get("Train_Number"));
-                    JSONArray coachArray = (JSONArray) jsonObject.get("Coaches");
-                    for (int coachIndex = 1; coachIndex <= coachArray.size(); coachIndex++) {
+                System.out.println("    Train Number                : " + jsonObject.get("Train_Number"));
+                JSONArray coachArray = (JSONArray) jsonObject.get("Coaches");
+                for (int coachIndex = 1; coachIndex <= coachArray.size(); coachIndex++) {
 
-                        JSONObject coachObject = (JSONObject) coachArray.get(coachIndex - 1);
-                        System.out.println("    Coach " + coachIndex + " Name                : "+ coachObject.get("Coach_Name_" + coachIndex));
-                        System.out.println("    Coach " + coachIndex + " Type                : "+ coachObject.get("Coach_Type_" + coachIndex));
-                        jsonArray = (JSONArray) coachObject.get("Seats_" + coachIndex);
+                    JSONObject coachObject = (JSONObject) coachArray.get(coachIndex - 1);
+                    System.out.println("    Coach " + coachIndex + " Name                : " + coachObject.get("Coach_Name_" + coachIndex));
+                    System.out.println("    Coach " + coachIndex + " Type                : " + coachObject.get("Coach_Type_" + coachIndex));
+                    jsonArray = (JSONArray) coachObject.get("Seats_" + coachIndex);
 
-                        int count = 0;
-                        int seatCount = 0;
+                    int count = 0;
+                    int seatCount = 0;
 
-                        for (int seatIndex = 1; seatIndex <= jsonArray.size(); seatIndex++) {
-                            JSONObject tempObject = (JSONObject) jsonArray.get(seatIndex - 1);
-                            seatCount++;
-                            if (tempObject.get("Seat_Status_" + seatIndex).toString().equals("Available")) {
-                                availSeat[trainIndex][count] = tempObject.get("Seat_Number_"+seatIndex).toString();
-                                availSeatType[trainIndex][count] = tempObject.get("Seat_Type_"+seatIndex).toString();
-                                count++;
-                            }
+                    for (int seatIndex = 1; seatIndex <= jsonArray.size(); seatIndex++) {
+                        JSONObject tempObject = (JSONObject) jsonArray.get(seatIndex - 1);
+                        seatCount++;
+                        if (tempObject.get("Seat_Status_" + seatIndex).toString().equals("Available")) {
+                            availSeat[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Number_" + seatIndex).toString();
+                            availSeatType[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Type_" + seatIndex).toString();
+                            count++;
                         }
-                        System.out.println("    Available Seats on coach " + coachIndex +"  : " +count);
-                        System.out.println("    Total number of seats       : "+ jsonArray.size());
-                        seatsOnCoach[trainIndex][coachIndex-1] = count;
-                        totalSeats[trainIndex][coachIndex-1] = seatCount;
-                        System.out.println();
                     }
+                    System.out.println("    Available Seats on coach " + coachIndex + "  : " + count);
+                    System.out.println("    Total number of seats       : " + jsonArray.size());
+                    seatsOnCoach[trainIndex][coachIndex - 1] = count;
+                    totalSeats[trainIndex][coachIndex - 1] = seatCount;
+                    System.out.println();
                 }
             }
+        }
     }
 
     static void printList(String[] stations) {

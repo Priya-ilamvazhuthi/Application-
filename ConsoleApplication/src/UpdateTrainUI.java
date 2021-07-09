@@ -1,11 +1,15 @@
 package com.consoleApp;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class UpdateTrainUI extends TrainSystem {
     private final String[] coachTypes = { "Two-tier", "Three-tier", "Sleeper", "AC" };
     static String[] seatTypes = { "Lower", "Middle", "Upper", "Side Lower", "Side Upper", "Sitting" };
     private final String[] seatStatuses = { "Available", "Booked", "Blocked" };
     private final String[] operatingDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
     UpdateTrainUI() {
         System.out.println("------------Updating Train------------");
@@ -18,9 +22,9 @@ public class UpdateTrainUI extends TrainSystem {
 
     void updateTrainInputs() {
         int coachIndex, seatIndex;
-        String newTrainName = "Chennai express";
-        String newTrainNumber = "8765";
-        String newCoachName = "S1";
+        String newTrainName = "";
+        String newTrainNumber = "";
+        String newCoachName = "";
         String newCoachType = coachTypes[3];
         String newCoachFare = "175";
         String newSeatNumber = "5";
@@ -47,24 +51,71 @@ public class UpdateTrainUI extends TrainSystem {
 
         int trainKeys = Console.getChoice(toBeModified.length);
         switch (trainKeys) {
-            case 1 -> updateTrain(trainIndex, "Train_Name", newTrainName);
-            case 2 -> updateTrain(trainIndex, "Train_Number", newTrainNumber);
+            case 1 -> {
+                System.out.print("Enter the new Train Name :");
+                try {
+                    newTrainName = input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                updateTrain(trainIndex, "Train_Name", newTrainName);
+                System.out.println();
+            }
+            case 2 -> {
+                System.out.print("Enter the new Train Number :");
+                try {
+                    newTrainNumber = input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                updateTrain(trainIndex, "Train_Number", newTrainNumber);
+                System.out.println();
+            }
             case 3 -> {
                 int coachLength = coachLength(trainIndex);
-                System.out.println("Enter the parameter to be modified");
+                System.out.println("Choose the parameter to be modified");
+                System.out.println();
                 for (int i = 0; i < coachLength; i++) {
                     System.out.println("[" + (i + 1) + "] " + "Coach " + (i + 1));
                 }
+                System.out.println();
                 coachIndex = Console.getChoice(coachLength);
-                System.out.println("Enter the parameter to be modified");
+                System.out.println();
                 for (int i = 0; i < coachToModify.length; i++) {
                     System.out.println("[" + (i + 1) + "] " + coachToModify[i]);
                 }
                 int coachKeys = Console.getChoice(coachToModify.length);
                 switch (coachKeys) {
-                    case 1 -> updateTrain("Train_" + trainIndex, "Coach_Name_" + coachIndex, newCoachName);
-                    case 2 -> updateTrain("Train_" + trainIndex, "Coach_Type_" + coachIndex, newCoachType);
-                    case 3 -> updateTrain("Train_" + trainIndex, "Coach_Fare_" + coachIndex, newCoachFare);
+                    case 1 -> {
+                        System.out.print("Enter the new Coach Name :");
+                        try {
+                            newCoachName = input.readLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        updateTrain("Train_" + trainIndex, "Coach_Name_" + coachIndex, newCoachName);
+                        System.out.println();
+                    }
+                    case 2 -> {
+                        System.out.print("Choose the new Coach type :");
+                        for (int i = 0; i < coachTypes.length; i++) {
+                            System.out.println("[" + (i + 1) + "] " + coachTypes[i]);
+                        }
+                        int choice = Console.getChoice(coachTypes.length);
+                        newCoachType = coachTypes[choice-1];
+                        updateTrain("Train_" + trainIndex, "Coach_Type_" + coachIndex, newCoachType);
+                        System.out.println();
+                    }
+                    case 3 -> {
+                        System.out.print("Enter the new Coach Fare :");
+                        try {
+                            newCoachFare = input.readLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        updateTrain("Train_" + trainIndex, "Coach_Fare_" + coachIndex, newCoachFare);
+                        System.out.println();
+                    }
                     case 4 -> {
                         int seatLength = seatLength(trainIndex, coachIndex);
                         System.out.println("Enter the parameter to be modified");
@@ -72,20 +123,46 @@ public class UpdateTrainUI extends TrainSystem {
                             System.out.println("[" + (i + 1) + "] " + "Seat " + (i + 1));
                         }
                         seatIndex = Console.getChoice(seatLength);
-                        System.out.println("Enter the parameter to be modified");
+                        System.out.println();
                         for (int i = 0; i < seatToModify.length; i++) {
                             System.out.println("[" + (i + 1) + "] " + seatToModify[i]);
                         }
                         int seatKeys = Console.getChoice(seatToModify.length);
                         switch (seatKeys) {
-                            case 1 -> updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
-                                    "Seat_Number_" + seatIndex, newSeatNumber);
-                            case 2 -> updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
-                                    "Seat_Type_" + seatIndex, newSeatType);
-                            case 3 -> updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
-                                    "Seat_Status_" + seatIndex, newSeatStatus);
+                            case 1 -> {
+                                System.out.println("Enter the new Seat Number :");
+                                try {
+                                    newSeatNumber = input.readLine();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
+                                        "Seat_Number_" + seatIndex, newSeatNumber);
+                                System.out.println();
+                            }
+                            case 2 -> {
+                                System.out.println("Choose the new Seat type :");
+                                for (int i = 0; i < seatTypes.length; i++) {
+                                    System.out.println("[" + (i + 1) + "] " + seatTypes[i]);
+                                }
+                                int choice = Console.getChoice(seatTypes.length);
+                                newSeatType = seatTypes[choice-1];
+                                updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
+                                        "Seat_Type_" + seatIndex, newSeatType);
+                                System.out.println();
+                            }
+                            case 3 -> {
+                                System.out.println("Choose the new Seat status :");
+                                for (int i = 0; i < seatStatuses.length; i++) {
+                                    System.out.println("[" + (i + 1) + "] " + seatStatuses[i]);
+                                }
+                                int choice = Console.getChoice(seatStatuses.length);
+                                newSeatStatus = seatStatuses[choice-1];
+                                updateTrain("Train_" + trainIndex, "Seats_" + coachIndex,
+                                        "Seat_Status_" + seatIndex, newSeatStatus);
+                                System.out.println();
+                            }
                         }
-                        System.out.println("Seat " + seatIndex);
                     }
                 }
             }

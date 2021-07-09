@@ -18,7 +18,7 @@ public class BookingPage extends BookingSystem {
         new EnquirePage();
         setBoardingStation(EnquirePage.source);
         setDestination(EnquirePage.destination);
-        setTravelDate(EnquirePage.travelDate);
+        setTravelDay(EnquirePage.travelDate);
         bookingInputs();
         int fare = getTotalFare();
         if(PaymentPage.getConfirmation(fare)) {
@@ -117,10 +117,13 @@ public class BookingPage extends BookingSystem {
 
         setNumOfTickets(numOfTickets);
         createPassengers();
+
+        int m=0;
         for (int i = 0; i < numOfTickets; i++) {
             try {
-                passengers[i].setBookedSeat(EnquirePage.availSeat[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]);
-                passengers[i].setBookedSeatType(EnquirePage.availSeat[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]);
+                passengers[i].setBookedSeat(EnquirePage.availSeat[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1][m]);
+                passengers[i].setBookedSeatType(EnquirePage.availSeatType[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1][m]);
+                m++;
                 passengers[i].setBookedCoach(coachName);
                 passengers[i].setBookedCoachType(coachType);
                 if(i >= EnquirePage.seatsOnCoach[getBoardingTrainIndex()-1][getBoardingCoachIndex()-1]) {
