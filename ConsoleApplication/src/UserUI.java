@@ -29,7 +29,7 @@ public class UserUI extends LoginSystem {
 
     static void userLogged() {
         System.out.println(
-                "Choose one option: \n[1] Enquire\n[2] View Schedule\n[3] Book a train \n[4] View Ticket Status\n[5] Cancel Ticket\n[6] Logout ");
+                "Choose one option: \n[1] Enquire\n[2] View Route\n[3] Book a train \n[4] View Ticket Status\n[5] Cancel Ticket\n[6] Logout ");
         System.out.println();
         int choice = Console.getChoice(6);
         switch (choice) {

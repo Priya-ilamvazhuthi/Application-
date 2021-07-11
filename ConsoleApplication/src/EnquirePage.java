@@ -22,63 +22,65 @@ public class EnquirePage extends BookingSystem {
     }
 
     void enquiryInputs() {
-        int index;
         String[] stations = listStationName();
         System.out.println("-----------Boarding Station-----------");
         System.out.println();
-        System.out.println("Choose an option:");
-        System.out.println("[1] Search by Station Name");
-        System.out.println("[2] Choose from list of stations");
-        int choice = Console.getChoice(2);
-        System.out.println();
-
-        if (choice == 1) {
-            System.out.print("Enter boarding station Name : ");
+            System.out.print("Search boarding station Name : ");
             try {
                 source = input.readLine();
-                setBoardingStation(source);
+                source = source.substring(0, 1).toUpperCase() + source.substring(1);
+                for (String station : stations) {
+                    if (station.startsWith(source))
+                        System.out.println("-> " + station);
+                }
+                System.out.print("Enter boarding station Name : ");
+                source = input.readLine();
+                source = source.substring(0, 1).toUpperCase() + source.substring(1);
+                int flag =0;
+                for (String station : stations) {
+                    if (station.equals(source)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if(flag == 1) setBoardingStation(source);
+                else {
+                    System.out.println("Station not found\nTry again");
+                    enquiryInputs();
+                }
                 System.out.println();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        if (choice == 2) {
-            System.out.println("Choose the boarding station");
-            printList(stations);
-            index = Console.getChoice(stations.length);
-            setBoardingStation(stations[index - 1]);
-            source = stations[index - 1];
-            System.out.println();
-        }
 
         System.out.println("---------Destination station----------");
         System.out.println();
-        System.out.println("Choose an option:");
-        System.out.println("[1] Search by Station Name");
-        System.out.println("[2] Choose from list of stations");
-        System.out.println();
-        choice = Console.getChoice(2);
-
-        if (choice == 1) {
-            System.out.print("Enter destination station Name : ");
-            try {
-                destination = input.readLine();
-                setDestination(destination);
-                System.out.println();
-            } catch (IOException e) {
-                e.printStackTrace();
+        System.out.print("Search destination station Name : ");
+        try {
+            destination = input.readLine();
+            destination = destination.substring(0, 1).toUpperCase() + destination.substring(1);
+            for (String station : stations) {
+                if (station.startsWith(destination))
+                    System.out.println("-> " + station);
             }
-
-        }
-
-        if (choice == 2) {
-            System.out.println("Choose the destination station");
-            printList(stations);
-            index = Console.getChoice(stations.length);
-            setDestination(stations[index - 1]);
-            destination = stations[index - 1];
+            System.out.print("Enter destination station Name : ");
+            destination = input.readLine();
+            destination = destination.substring(0, 1).toUpperCase() + destination.substring(1);
+            int flag =0;
+            for (String station : stations) {
+                if (station.equals(destination)) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag == 1) setDestination(destination);
+            else {
+                System.out.println("Station not found\nTry again");
+                enquiryInputs();
+            }
             System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         System.out.print("Enter travel date (Format : yyyy-mm-dd) : ");
@@ -89,11 +91,20 @@ public class EnquirePage extends BookingSystem {
             BoardingDate = date;
             Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-            String tomorrowDay = sdf.format(date1);
-            setTravelDay(tomorrowDay);
-            travelDate = tomorrowDay;
-            System.out.println();
+            Date current = new Date();
+
+            if(date1.before(current)){
+                System.out.println("The date is older than current day");
+                System.out.println("Try again");
+                enquiryInputs();
+            }
+            else {
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+                String tomorrowDay = sdf.format(date1);
+                setTravelDay(tomorrowDay);
+                travelDate = tomorrowDay;
+                System.out.println();
+            }
         } catch (IOException | ParseException e) {
             System.out.println("Error with date");
             enquiryInputs();
@@ -138,11 +149,36 @@ public class EnquirePage extends BookingSystem {
 
                     int count = 0;
                     int seatCount = 0;
+                    int flag = 0;
 
                     for (int seatIndex = 1; seatIndex <= jsonArray.size(); seatIndex++) {
                         JSONObject tempObject = (JSONObject) jsonArray.get(seatIndex - 1);
+                        JSONArray tempArray = (JSONArray) tempObject.get("Seat_Status");
                         seatCount++;
-                        if (tempObject.get("Seat_Status_" + seatIndex).toString().equals("Available")) {
+                        if (!(tempArray.size() == 0)) {
+                            for (Object o : tempArray) {
+                                JSONObject tempObject1 = (JSONObject) o;
+                                if (tempObject1.get("Date").toString().equals(BoardingDate)) {
+                                    String[] scheduleList = listSchedule(trainIndex + 1);
+                                    for (int i = 0; i < scheduleList.length; i++) {
+                                        if (scheduleList[i].equals(tempObject1.get("Destination"))) {
+                                            for (int j = i + 1; j < scheduleList.length; j++) {
+                                                if ((scheduleList[j].equals(getDestination()))) {
+                                                    flag = 0;
+                                                    break;
+                                                } else flag = 1;
+                                            }
+                                            if (flag == 1) {
+                                                availSeat[trainIndex][coachIndex - 1][count] = null;
+                                                availSeatType[trainIndex][coachIndex - 1][count] = null;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else flag = 0;
+                        if (flag == 0) {
                             availSeat[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Number_" + seatIndex).toString();
                             availSeatType[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Type_" + seatIndex).toString();
                             count++;
@@ -155,12 +191,6 @@ public class EnquirePage extends BookingSystem {
                     System.out.println();
                 }
             }
-        }
-    }
-
-    static void printList(String[] stations) {
-        for (int i = 0; i < stations.length; i++) {
-            System.out.println("[" + (i + 1) + "] " + stations[i]);
         }
     }
 

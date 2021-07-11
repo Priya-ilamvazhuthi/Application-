@@ -18,9 +18,9 @@ public class StationUI extends TrainSystem {
     void stationAddInputs() {
         setNumOfStations(1);
         createStation();
-        stations[0].setStationName("Coimbatore junction");
-        stations[0].setStationCode("CBE");
-        stations[0].setStationAddress("Coimbatore");
+        stations[0].setStationName("Ariyalur");
+        stations[0].setStationCode("ALU");
+        stations[0].setStationAddress("Ariyalur");
         stations[0].setNumOfPlatforms(2);
         stations[0].createPlatform();
         stations[0].platforms[0].setPlatformNumber(1);
