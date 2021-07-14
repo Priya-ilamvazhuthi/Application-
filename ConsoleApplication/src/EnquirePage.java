@@ -166,18 +166,32 @@ public class EnquirePage extends BookingSystem {
                                     String[] scheduleList = listSchedule(trainIndex + 1);
 
                                     for (int i = 0; i < scheduleList.length; i++) {
+                                        if(scheduleList[i].equals(tempObject1.get("Source"))) {
+                                            for(int j = 0 ; j <= i ; j++) {
+                                                if(scheduleList[j].equals(getDestination())) {
+                                                    flag =0 ;
+                                                    break;
+                                                } else flag = 1 ;
+                                            }
+                                            if (flag == 0) {
+                                                availSeat[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Number_" + seatIndex).toString();
+                                                availSeatType[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Type_" + seatIndex).toString();
+                                                count++;
+                                            }
+                                        }
+
                                         if (scheduleList[i].equals(tempObject1.get("Destination"))) {
-                                            for (int j = i + 1; j < scheduleList.length; j++) {
-                                                if ((scheduleList[j].equals(getDestination()))) {
+                                            for (int j = i ; j < scheduleList.length; j++) {
+                                                if ((scheduleList[j].equals(getBoardingStation()))) {
                                                     flag = 0;
                                                     break;
                                                 } else flag = 1;
                                             }
-                                            if (flag == 1) {
-                                                availSeat[trainIndex][coachIndex - 1][count] = null;
-                                                availSeatType[trainIndex][coachIndex - 1][count] = null;
-                                                break;
-                                            }
+                                        }
+
+                                        if (flag == 1) {
+                                            availSeat[trainIndex][coachIndex - 1][count] = null;
+                                            availSeatType[trainIndex][coachIndex - 1][count] = null;
                                         }
                                     }
                                 }
@@ -185,7 +199,6 @@ public class EnquirePage extends BookingSystem {
                         }
                         else flag = 0;
                         if (flag == 0) {
-                            //System.out.println("here too");
                             availSeat[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Number_" + seatIndex).toString();
                             availSeatType[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Type_" + seatIndex).toString();
                             count++;

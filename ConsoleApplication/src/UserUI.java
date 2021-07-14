@@ -29,9 +29,9 @@ public class UserUI extends LoginSystem {
 
     static void userLogged() {
         System.out.println(
-                "Choose one option: \n[1] Enquire\n[2] View Route\n[3] Book a train \n[4] View Ticket Status\n[5] Cancel Ticket\n[6] Logout ");
+                "Choose one option: \n[1] Enquire\n[2] View Route\n[3] Book a train \n[4] View Ticket Status\n[5] Cancel Ticket\n[6] View Ticket\n[7] Logout ");
         System.out.println();
-        int choice = Console.getChoice(6);
+        int choice = Console.getChoice(7);
         switch (choice) {
             case 1 -> {
                 System.out.println("---------------Enquiry----------------");
@@ -43,7 +43,8 @@ public class UserUI extends LoginSystem {
             case 3 -> new BookingPage();
             case 4 -> new ViewStatusPage();
             case 5 -> new CancelTicketUI();
-            case 6 -> Console.welcomePage();
+            case 6 -> new ViewTicket();
+            case 7 -> Console.welcomePage();
         }
     }
 }

@@ -61,6 +61,7 @@ public class BookingPage extends BookingSystem {
             JSONArray coachArray = (JSONArray) jsonObject.get("Coaches");
 
             for (int i = 0; i < coachArray.size(); i++) {
+                System.out.println("--------------------------------------");
                 JSONObject coachObject = (JSONObject) coachArray.get(i);
                 System.out.println("["+(i+1)+"] Coach Name                :  "+coachObject.get("Coach_Name_"+(i+1)));
                 System.out.println("    Coach Type                :  "+coachObject.get("Coach_Type_"+(i+1)));
@@ -86,13 +87,13 @@ public class BookingPage extends BookingSystem {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.print("Enter the number of Seats : ");
-        System.out.println();
         int numOfTickets = 0;
         try {
             numOfTickets = Integer.parseInt(input.readLine());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println();
 
         JSONObject coachObject = (JSONObject) coachArray.get((index1 - 1));
         JSONArray seatArray = (JSONArray) coachObject.get("Seats_" + index1);
@@ -111,13 +112,6 @@ public class BookingPage extends BookingSystem {
             System.out.println();
             new BookingPage();
         }
-        if (numOfTickets > count) {
-            System.out.println("--Some seats will be in waiting list--");
-        } else {
-            System.out.println("----------All seats Confirmed---------");
-
-        }
-        System.out.println();
 
         setNumOfTickets(numOfTickets);
         createPassengers();
@@ -137,9 +131,9 @@ public class BookingPage extends BookingSystem {
                 else
                     passengers[i].setBookingStatus("Confirmed");
                 ticket.setFare(fare);
-                System.out.println("Enter Passenger " + (i + 1) + " Name :");
+                System.out.print("Enter Passenger " + (i + 1) + " Name : ");
                 passengers[i].setPassengerName(input.readLine());
-                System.out.println("Enter Passenger " + (i + 1) + " Age :");
+                System.out.print("Enter Passenger " + (i + 1) + " Age  : ");
                 passengers[i].setPassengerAge(Integer.parseInt(input.readLine()));
                 String[] seatType =UpdateTrainUI.seatTypes;
                 for (int j = 0; j < seatType.length; j++) {
@@ -147,9 +141,9 @@ public class BookingPage extends BookingSystem {
                 }
                 int x;
                 do {
-                    System.out.println("Select Passenger " + (i + 1) + " Preferred birth from above list:");
-                    System.out.println();
+                    System.out.print("Select Passenger " + (i + 1) + " Preferred birth from above list: ");
                     x = Integer.parseInt(input.readLine());
+                    System.out.println();
                     passengers[i].setPreferredSeat(UpdateTrainUI.seatTypes[x]);
                 } while (!(x > 0 && x < ((UpdateTrainUI.seatTypes.length) + 1)));
             } catch (IOException e) {
