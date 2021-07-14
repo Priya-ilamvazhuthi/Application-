@@ -24,7 +24,11 @@ public class BookingPage extends BookingSystem {
         if(PaymentPage.getConfirmation(fare)) {
             System.out.println("------Ticket booked Successfully------");
             bookTicket();
-            System.out.println("Your booking ID is:" + ticket.getBookingID());
+            System.out.println();
+            System.out.println("--------------------------------------");
+            System.out.println("|     Your booking ID is: "+ ticket.getBookingID() +"       |");
+            System.out.println("--------------------------------------");
+            System.out.println();
         }
         else {
             System.out.println();

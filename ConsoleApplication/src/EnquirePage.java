@@ -29,60 +29,64 @@ public class EnquirePage extends BookingSystem {
             try {
                 source = input.readLine();
                 source = source.substring(0, 1).toUpperCase() + source.substring(1);
+                int count = 1;
                 for (String station : stations) {
-                    if (station.startsWith(source))
-                        System.out.println("-> " + station);
-                }
-                System.out.print("Enter boarding station Name : ");
-                source = input.readLine();
-                source = source.substring(0, 1).toUpperCase() + source.substring(1);
-                int flag =0;
-                for (String station : stations) {
-                    if (station.equals(source)) {
-                        flag = 1;
-                        break;
+                    if (station.startsWith(source)) {
+                        System.out.println("[" + count + "] " + station);
+                        count++;
                     }
                 }
-                if(flag == 1) setBoardingStation(source);
-                else {
-                    System.out.println("Station not found\nTry again");
+                if(count == 1){
+                    System.out.println("No stations found");
                     enquiryInputs();
+                }
+                int choice = Console.getChoice(count);
+                count =1;
+                for (int i =0; i< stations.length ; i ++) {
+                    if (stations[i].startsWith(source)) {
+                        if (count == choice) {
+                            setBoardingStation(stations[i]);
+                            source = stations[i];
+                        }
+                        count++;
+                    }
                 }
                 System.out.println();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         System.out.println("---------Destination station----------");
         System.out.println();
         System.out.print("Search destination station Name : ");
         try {
             destination = input.readLine();
             destination = destination.substring(0, 1).toUpperCase() + destination.substring(1);
+            int count = 1;
             for (String station : stations) {
-                if (station.startsWith(destination))
-                    System.out.println("-> " + station);
-            }
-            System.out.print("Enter destination station Name : ");
-            destination = input.readLine();
-            destination = destination.substring(0, 1).toUpperCase() + destination.substring(1);
-            int flag =0;
-            for (String station : stations) {
-                if (station.equals(destination)) {
-                    flag = 1;
-                    break;
+                if (station.startsWith(destination)) {
+                    System.out.println("[" + count + "] " + station);
+                    count++;
                 }
             }
-            if(flag == 1) setDestination(destination);
-            else {
-                System.out.println("Station not found\nTry again");
+            if(count == 1){
+                System.out.println("No stations found");
                 enquiryInputs();
+            }
+            int choice = Console.getChoice(count);
+            count =1;
+            for (int i =0 ;i < stations.length ;i++) {
+                if (stations[i].startsWith(destination)) {
+                    if (count == choice) {
+                        setDestination(stations[i]);
+                        destination = stations[i];
+                    }
+                    count++;
+                }
             }
             System.out.println();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.print("Enter travel date (Format : yyyy-mm-dd) : ");
 
         String date;
@@ -94,7 +98,7 @@ public class EnquirePage extends BookingSystem {
             Date current = new Date();
 
             if(date1.before(current)){
-                System.out.println("The date is older than current day");
+                System.out.println("Booking allowed from tomorrow only");
                 System.out.println("Try again");
                 enquiryInputs();
             }
@@ -160,6 +164,7 @@ public class EnquirePage extends BookingSystem {
                                 JSONObject tempObject1 = (JSONObject) o;
                                 if (tempObject1.get("Date").toString().equals(BoardingDate)) {
                                     String[] scheduleList = listSchedule(trainIndex + 1);
+
                                     for (int i = 0; i < scheduleList.length; i++) {
                                         if (scheduleList[i].equals(tempObject1.get("Destination"))) {
                                             for (int j = i + 1; j < scheduleList.length; j++) {
@@ -177,8 +182,10 @@ public class EnquirePage extends BookingSystem {
                                     }
                                 }
                             }
-                        } else flag = 0;
+                        }
+                        else flag = 0;
                         if (flag == 0) {
+                            //System.out.println("here too");
                             availSeat[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Number_" + seatIndex).toString();
                             availSeatType[trainIndex][coachIndex - 1][count] = tempObject.get("Seat_Type_" + seatIndex).toString();
                             count++;

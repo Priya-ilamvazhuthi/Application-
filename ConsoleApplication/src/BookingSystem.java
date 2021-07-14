@@ -154,7 +154,7 @@ public class BookingSystem extends TrainSystem {
         ticket.setBookingID(id);
     }
 
-    void updateOnCancel(String cancelledSource, String cancelledDestination, String cancelledDate, String cancelledTrain, String cancelledCoach, String cancelledSeatNumber, String cancelledSeatType, int cancelledNumOfTickets) {
+    void updateOnCancel(int cancelledNumOfTickets) {
         JSONObject jsonObject;
         JSONParser jsonParser = new JSONParser();
         JSONObject ticketObject;
@@ -283,6 +283,14 @@ public class BookingSystem extends TrainSystem {
         }
     }
 
+    static String cancelledTrain;
+    static String cancelledDate;
+    static String cancelledSource;
+    static String cancelledDestination;
+    static String cancelledCoach;
+    static String cancelledSeatNumber = null;
+    static String cancelledSeatType = null;
+
     void cancelTicket(int ticketNumber) {
         JSONObject jsonObject;
         JSONParser jsonParser = new JSONParser();
@@ -290,17 +298,18 @@ public class BookingSystem extends TrainSystem {
             FileReader fileReader = new FileReader(ticketFilePath);
             JSONObject ticketObject = (JSONObject) jsonParser.parse(fileReader);
             jsonObject = (JSONObject) ticketObject.get("Ticket_" + ticketNumber);
-            String cancelledTrain = jsonObject.get("Train_Name").toString();
-            String cancelledDate = jsonObject.get("Date").toString();
-            String cancelledSource = jsonObject.get("Boarding Station").toString();
-            String cancelledDestination = jsonObject.get("Destination").toString();
+            cancelledTrain = jsonObject.get("Train_Name").toString();
+            cancelledDate = jsonObject.get("Date").toString();
+            cancelledSource = jsonObject.get("Boarding Station").toString();
+            cancelledDestination = jsonObject.get("Destination").toString();
+
             JSONArray passengerArray = (JSONArray) jsonObject.get("Passengers");
             JSONObject passengerObject = (JSONObject) passengerArray.get(0);
             int cancelledNumOfTickets = (passengerObject.size() / 6);
             JSONObject coachObject = (JSONObject) passengerArray.get(0);
-            String cancelledCoach = coachObject.get("Passenger1_Coach_Name").toString();
-            String cancelledSeatNumber = null;
-            String cancelledSeatType = null;
+
+            cancelledCoach = coachObject.get("Passenger1_Coach_Name").toString();
+
             if (coachObject.get("Passenger1_Seat_Number") != null) {
                 cancelledSeatNumber = coachObject.get("Passenger1_Seat_Number").toString();
                 cancelledSeatType = coachObject.get("Passenger1_Seat_Type").toString();
@@ -314,7 +323,7 @@ public class BookingSystem extends TrainSystem {
                 finalObject.put("Ticket_" + i, ticketObject.get("Ticket_" + ticketIndex++));
             }
             writeJson(finalObject, ticketFilePath);
-            updateOnCancel(cancelledSource, cancelledDestination, cancelledDate, cancelledTrain, cancelledCoach, cancelledSeatNumber, cancelledSeatType, cancelledNumOfTickets);
+            updateOnCancel(cancelledNumOfTickets);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -343,8 +352,9 @@ public class BookingSystem extends TrainSystem {
         JSONParser jsonParser = new JSONParser();
         JSONArray availableTrainArray = new JSONArray();
         try {
-            FileReader fileReader = new FileReader("train.json");
+            FileReader fileReader = new FileReader(filePath);
             jsonObject = (JSONObject) jsonParser.parse(fileReader);
+
             for (int trainIterator = 1; trainIterator <= existingTrainsCount(); trainIterator++) {
                 JSONObject trains = (JSONObject) jsonObject.get("Train_" + (trainIterator));
                 JSONObject operatingDays = (JSONObject) trains.get("Operating_Days");
@@ -354,7 +364,7 @@ public class BookingSystem extends TrainSystem {
                         if (operatingDays.get("Day_" + dayIterator).toString().equals(getTravelDay())) {
                             for (int routeIterator = 1; routeIterator <= route.size(); routeIterator++) {
                                 if (route.get("Stop_" + routeIterator).toString().equals(getBoardingStation())) {
-                                    for (int j = 1; j < route.size(); j++) {
+                                    for (int j = routeIterator + 1; j <= route.size(); j++) {
                                         if (route.get("Stop_" + j).toString().equals(getDestination())) {
                                             availableTrainArray.add(trains);
                                             break;
